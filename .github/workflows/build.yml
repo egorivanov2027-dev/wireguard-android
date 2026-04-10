@@ -3,6 +3,7 @@ name: Build APK
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,8 +24,11 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Set up NDK
+      - name: Set up Android SDK & NDK
         uses: android-actions/setup-android@v3
+
+      - name: Install NDK
+        run: echo "y" | sdkmanager "ndk;27.0.12077973" "cmake;3.22.1"
 
       - name: Build APK
         run: ./gradlew assembleRelease
